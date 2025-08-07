@@ -1,0 +1,6 @@
+{
+    "guy": "./sprites/guy.png",
+    "gal": "./sprites/gal.png",
+    "maze": "./sprites/map.png",
+    "block": "./sprites/block.png"
+}
