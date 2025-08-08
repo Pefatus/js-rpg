@@ -1,0 +1,44 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "test.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "prototype_tiles.tsx": {
+            "scaleInDock": 0.25,
+            "scaleInEditor": 0.25
+        },
+        "test.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 780,
+                "y": 684
+            }
+        }
+    },
+    "last.exportedFilePath": "C:/Users/Lenovo/Code/Javascript/jsrpg/data",
+    "last.imagePath": "C:/Users/Lenovo/Code/Javascript/jsrpg/sprites",
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 128,
+    "map.tileWidth": 128,
+    "map.width": 20,
+    "openFiles": [
+        "test.tmx"
+    ],
+    "project": "jsrpg.tiled-project",
+    "recentFiles": [
+        "test.tmx",
+        "prototype_tiles.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 128,
+        "width": 128
+    }
+}

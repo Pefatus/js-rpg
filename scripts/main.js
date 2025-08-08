@@ -1,7 +1,7 @@
 import loadSprites from './loader.js';
-import { Spritesheet } from './utils.js';
+import { Spritesheet, AtlasSprite } from './sprites.js';
 import Player from './player.js';
-import Tile from './tile.js';
+import { getTilemapImgs } from './map.js';
 import Camera from './camera.js';
 import './input.js'
 
@@ -13,33 +13,53 @@ ctx.imageSmoothingEnabled = false; // No blurry pixel art after scalling.. yay
 
 const sprites = await loadSprites();
 
-const player = new Player(264, 440, new Spritesheet(sprites.guy, 3, 3, 3));
-player.speed = 4;
+// const player = new Player(400, 200, new Spritesheet(sprites.guy, 3, 3, 3));
+// player.speed = 4;
 
 Camera.w = canvas.width, Camera.h = canvas.height;
 
 window.tiles = []
 
-sprites.block.scale = 0.5;
-const b1 = new Tile(320, 512, sprites.block);
-const b2 = new Tile(340, 600, sprites.block);
-const b3 = new Tile(360, 650, sprites.block);
+const tilesheet = new Spritesheet(sprites.tiles, 17, 5, 0.5)
+const mapLayers = await getTilemapImgs("./data/test.json", new AtlasSprite(tilesheet))
 
-window.tiles.push(b1, b2, b3);
+const player = new Player(200, 300, new Spritesheet(sprites.guy, 3, 3, 3), 4)
+player.sprite.tracks = {
+    default: [0],
+    walkDown: [3, 0, 6, 0],
+    walkRight: [4, 1, 7, 1],
+    walkUp: [5, 2, 8, 2],
+    faceDown: [0], faceUp: [2], faceRight: [1],
+};
+
+const renderQueue = []
+renderQueue.push(...mapLayers, player.sprite)
+renderQueue.sort((a, b) => a.z - b.z)
 
 function update() {
     player.moveAndCollide();
     Camera.follow(player);
+
+    if (window.keys.down) {
+        player.sprite.track = "walkDown"
+    } else if (window.keys.up) {
+        player.sprite.track = "walkUp"
+    } else if (window.keys.right) {
+        player.sprite.track = "walkRight"
+        player.sprite.flip = false
+    } else if (window.keys.left) {
+        player.sprite.track = "walkRight"
+        player.sprite.flip = true
+    } else {
+        if (player.sprite.track == "walkDown") { player.sprite.track = "faceDown"; }
+        if (player.sprite.track == "walkUp") { player.sprite.track = "faceUp"; }
+        if (player.sprite.track == "walkRight") { player.sprite.track = "faceRight"; }
+    }
 }
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.drawImage(sprites.maze, - Camera.x, - Camera.y, 3200, 1216);
-    player.render(ctx);
-    b1.render(ctx);
-    b2.render(ctx);
-    b3.render(ctx);
+    renderQueue.forEach((x) => x.render(ctx));
 }
 
 function gameLoop() {
@@ -50,11 +70,3 @@ function gameLoop() {
 }
 
 gameLoop()
-
-// trash code
-document.getElementById("btn1").addEventListener("click", () => {
-    if (player.sprite == sprites.guy) player.sprite = sprites.gal;
-    else if (player.sprite == sprites.gal) player.sprite = sprites.guy;
-});
-document.getElementById("btn2").addEventListener("click", () => player.speed++);
-document.getElementById("btn3").addEventListener("click", () => player.speed--);

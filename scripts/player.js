@@ -1,14 +1,31 @@
-import AnimatedBody from "./animator.js";
+import ColliderBody from "./collider.js";
+import { AnimatedSprite } from "./sprites.js";
 import { normalizedVec, boxesCollide } from "./utils.js";
 
-class Player extends AnimatedBody {
+class Player extends ColliderBody {
     constructor(x, y, spritesheet, speed) {
-        super(x, y, spritesheet);
+        super(x, y, 36, 20);
         this.speed = speed;
+
+        this.sprite = new AnimatedSprite(spritesheet);
 
         this.motion = [0, 0];
         this.collidedTile = null;
     }
+
+    set x(val) {
+        this.rect.x = val;
+        this.sprite.x = val - (this.sprite.w - this.rect.w) / 2;
+    }
+    set y(val) {
+        this.rect.y = val;
+        this.sprite.y = val - (this.sprite.h - this.rect.h) / 2 - 16;
+    }
+    get x() { return this.rect.x; }
+    get y() { return this.rect.y; }
+
+    get w() { return this.sprite.w; }
+    get h() { return this.sprite.h; }
 
     moveAndCollide() {
         this.motion[0] = window.keys.right - window.keys.left;
@@ -16,19 +33,6 @@ class Player extends AnimatedBody {
 
         this.motion = normalizedVec(this.motion) // No more faster diagonal movement
 
-        if (window.keys.up) { this.anim = "walkUp" }
-        else if (window.keys.down) { this.anim = "walkDown" }
-        else if (window.keys.right) {
-            this.flip = false;
-            this.anim = "walkRight";
-        } else if (window.keys.left) {
-            this.flip = true;
-            this.anim = "walkRight";
-        } else {
-            if (this.anim == "walkRight") this.anim = "faceRight";
-            if (this.anim == "walkUp") this.anim = "faceUp";
-            if (this.anim == "walkDown") this.anim = "faceDown";
-        }
 
         this.x += this.motion[0] * this.speed;
         this.collidedTile = this.checkCollision()

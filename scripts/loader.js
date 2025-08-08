@@ -1,6 +1,6 @@
 async function loadSprites() {
-    const imgRes = await fetch("./data/images.json")
-    const imgData = await imgRes.json()
+    const imgRes = await fetch("./data/images.json");
+    const imgData = await imgRes.json();
     const loadedSprites = {};
 
     const promises = []

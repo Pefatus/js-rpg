@@ -1,14 +1,5 @@
 import Camera from "./camera.js";
 
-class Spritesheet {
-    constructor(img, hframes, vframes, scale = 1) {
-        this.img = img;
-        this.hframes = hframes;
-        this.vframes = vframes;
-        this.scale = scale;
-    }
-}
-
 class Box {
     constructor(x, y, width, height, color = "red", borderSize = 0) {
         this.x = x, this.y = y;
@@ -42,4 +33,4 @@ const normalizedVec = (vector) => {
     else return vector
 }
 
-export { Spritesheet, Box, boxesCollide, normalizedVec };
+export { Box, boxesCollide, normalizedVec };
